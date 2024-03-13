@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Detail</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .user-details {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .teaching-details {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .teaching-details li {
+        margin-bottom: 10px;
+      }
+
+      /* Style for links */
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="user-details">
+      <h1>User Detail</h1>
+      <p>Username: {{ user }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>User Type: {{ user.get_user_type_display }}</p>
+      <h2>Teaching Details:</h2>
+      <ul class="teaching-details">
+        {% for detail in teaching_details %}
+        <li>{{ detail.semester_taught }}</li>
+        {% if not attendance %}
+        <button
+          class="attendanceButton"
+          data-semester="{{ detail.semester_taught }}"
+          data-userid="{{ user.id }}"
+        >
+          Add attendance
+        </button>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
+<script>
+  document.querySelectorAll(".attendanceButton").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var semesterTaught = this.getAttribute("data-semester");
+      var userId = this.getAttribute("data-userid");
+      console.log(semesterTaught);
+      var url =
+        "add_attendance?semester=" +
+        encodeURIComponent(semesterTaught) +
+        "&user_id=" +
+        encodeURIComponent(userId);
+
+      window.location.href = url;
+    });
+  });
+</script>

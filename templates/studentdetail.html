@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Detail</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .user-details {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .teaching-details {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .teaching-details li {
+        margin-bottom: 10px;
+      }
+
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="user-details">
+      <h1>User Detail</h1>
+      <p>Username: {{ user.username }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>User Type: {{ user.get_user_type_display }}</p>
+      <h2>Student Details:</h2>
+      <ul class="teaching-details">
+        {% for detail in student_details %}
+        <li>{{ detail.student_semester }}</li>
+        {% endfor %}
+        <li>
+          <a href="{% url 'student_attendance' user.id %}">View attendance</a>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

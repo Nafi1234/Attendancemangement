@@ -23,5 +23,13 @@ urlpatterns = [
     path('adminlogin',views.adminlogin,name="adminlogin"),
     path('',views.studentlogin,name="studentlogin"),
     path('studentresgister',views.studentregister,name="register_student"),
-    path('register',include('myadmin.urls'))
+    path('facultylogin',views.facultylogin,name="faculty_login"),
+    path('facultydetail<int:user_id>/', views.user_detail_view, name='faculty_detail'),
+    path('studentdetail<int:user_id>/',views.studentdetailview,name="studentdetail"),
+    path('facultydetail<int:user_id>/add_attendance/', views.studentattendance, name='add_attendance'),
+    path('studentattendance<int:user_id>/',views.viewstudentattendance,name="student_attendance"),
+    path('submited_attendance/',views.submit_attendance,name="submited_attendance"),
+
+    path('register',include('myadmin.urls')),
+    path('faculty/',include('faculty.urls'))
 ]

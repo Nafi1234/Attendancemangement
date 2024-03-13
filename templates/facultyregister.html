@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faculty Registration Form</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      h2 {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      form {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #semester_fields {
+        margin-top: 20px;
+      }
+
+      #semester_fields div {
+        margin-bottom: 10px;
+      }
+
+      #semester_fields label {
+        display: block;
+        font-weight: normal;
+      }
+
+      #semester_fields input[type="text"] {
+        width: calc(50% - 5px);
+        display: inline-block;
+      }
+
+      #semester_fields input[type="text"]:nth-child(odd) {
+        margin-right: 10px;
+      }
+
+      #semester_fields input[type="text"],
+      #semester_fields label {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Faculty Registration Form</h2>
+    <form action="{% url 'register_faculty' %}" method="post" id="faculty_registration_form">
+      {% csrf_token %}
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+  
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+  
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+  
+
+  
+      <label for="user_type">User Type:</label>
+      <select id="user_type" name="user_type" required>
+        <option value="F">Faculty</option>
+      </select>
+  
+      <div id="semester_fields"></div>
+  
+      <button type="button" id="add_semester">Add Semester</button>
+  
+      <input type="submit" value="Register" />
+    </form>
+  
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const addSemesterButton = document.getElementById("add_semester");
+        const semesterFields = document.getElementById("semester_fields");
+  
+        let semesterCount = 1;
+   
+        addSemesterButton.addEventListener("click", function () {
+          const semesterDiv = document.createElement("div");
+          semesterDiv.innerHTML = `
+            <div id="semester_${semesterCount}">
+              <label for="semester_${semesterCount}">Semester ${semesterCount}:</label>
+              <input type="text" id="semester_${semesterCount}" name="semesters[]" required />
+              <label for="subjects_${semesterCount}">Subjects for Semester ${semesterCount}:</label>
+              <input type="text" id="subjects_${semesterCount}" name="subjects[]" required />
+              <button type="button" onclick="removeSemester(${semesterCount})">Remove</button>
+            </div>
+          `;
+          semesterFields.appendChild(semesterDiv);
+          semesterCount++;
+        });
+  
+        window.removeSemester = function(semesterId) {
+          const semesterToRemove = document.getElementById(`semester_${semesterId}`);
+          if (semesterToRemove) {
+            semesterToRemove.remove();
+          }
+        }
+      });
+    </script>
+  </body>
+  </html>
+</html>

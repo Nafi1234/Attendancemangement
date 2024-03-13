@@ -140,7 +140,7 @@
     </div>
     <form method="POST">
       {% csrf_token %}
-      <h3>Student Login</h3>
+      <h3>Faculty Login</h3>
 
       <label for="username">Username</label>
       <input
@@ -161,12 +161,12 @@
       <button>Log In</button>
       <div class="social">
         <div>
-          <a href="{% url 'register_student' %}" class="go"
-            >Student Registration</a
-          >
+          <a href="{% url 'register_student' %}" class="go">Student login</a>
         </div>
         <div>
-          <a href="{% url 'faculty_login' %}" class="go">Faculty login</a>
+          <a href="{% url 'register_faculty' %}" class="go"
+            >Faculty Registeration</a
+          >
         </div>
       </div>
     </form>

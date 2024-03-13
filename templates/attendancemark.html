@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Form</title>
+  </head>
+  <body>
+    <form id="attendanceForm">
+      <table>
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Attendance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <td>{{ student.name }}</td>
+            <td>
+              <input
+                type="checkbox"
+                id="attendance{{ student.id }}"
+                name="attendance_{{ student.id }}"
+              />
+              <label for="attendance{{ student.id }}">Present</label>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <label for="attendanceDate">Date:</label>
+      <input type="date" id="attendanceDate" name="attendanceDate" />
+
+      <button type="button" id="submitAttendance">Submit Attendance</button>
+    </form>
+
+    <script>
+      document.getElementById("submitAttendance").addEventListener("click", function () {
+          var selectedDate = document.getElementById("attendanceDate").value;
+          var user_id = {{ user_id }};
+          var semesters = {{ semesters }};
+          var students = document.querySelectorAll('[id^="attendance"]');
+          var attendanceData = [];
+
+          students.forEach(function (student) {
+              var studentId = student.id.replace("attendance", "");
+
+              if (!isNaN(studentId) && studentId !== "") {
+                  var attendanceStatus = student.checked ? "Present" : "Absent";
+                  attendanceData.push({
+                      studentId: studentId,
+                      attendanceStatus: attendanceStatus,
+                      date: selectedDate,
+                      semester: semesters
+                  });
+              }
+          });
+
+          var url = "/submited_attendance/?user_id=" + user_id;
+
+          fetch(url, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(attendanceData),
+          })
+          .then((response) => {
+              if (response.ok) {
+                  console.log("Attendance submitted successfully.");
+              } else {
+                  console.error("Failed to submit attendance.");
+              }
+          })
+          .catch((error) => {
+              console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
+</html>

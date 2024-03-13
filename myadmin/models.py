@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
-        user = self.model(email=email,name=name, user=user_type,**extra_fields)
+        user = self.model(email=email,name=name, user_type=user_type,**extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -24,11 +24,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser):
-    
     name=models.CharField(max_length=50)
-    
     email = models.EmailField(unique=True)
-    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     USER_TYPES=[
@@ -44,3 +41,17 @@ class CustomUser(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+class Semesterss(models.Model):
+    semester_no = models.IntegerField()
+    subject = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Semester {self.semester_no}"
+
+class FacultyDetails(models.Model):
+    faculty = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    semester_taught = models.ForeignKey(Semesterss, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.faculty.name} teaches {self.semester_taught}"
